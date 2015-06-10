@@ -1,8 +1,19 @@
-<h3>My Calender JSON</h3>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+	$(".button").on("click", function() {
+		window.location.replace("/disconnect");
+		window.location.href = "disconnect";
+	})
+
+})
+
+</script>
+<h3>My Calender JSON</h3>
+<button class="button">Log Out</button>
+<div class = "info"><%= @token %></div>
 <ul class = "list">
 	<li class= "list">
 		<%= @carry %>
 	</li>
 </ul>
-<a href="/disconnect">Log Out</a>

@@ -4,6 +4,7 @@ require 'google/api_client/client_secrets'
 require 'google/api_client/auth/file_storage'
 require 'sinatra'
 require 'logger'
+require 'net/http'
 
 enable :sessions
 
@@ -71,15 +72,16 @@ get '/' do
                               :parameters => {'calendarId' => 'primary'},
                               :authorization => user_credentials)
     @carry = result.data.to_json
+    @carry = JSON.parse(@carry)["summary"]
     [result.status, {'Content-Type' => 'application/json'}, result.data.to_json]
     erb :index
   end
 end
-
 get '/disconnect' do
   token = session.delete("access_token")
   session.delete("refresh_token")
   session.delete("expires_in")
   session.delete("issued_at")
-  redirect to("https://accounts.google.com/o/oauth2/revoke?token=" + token)
+  response = Net::HTTP.get(URI.parse("https://accounts.google.com/o/oauth2/revoke?token=" + token))
+  redirect to("/")
 end
